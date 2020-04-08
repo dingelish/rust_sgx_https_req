@@ -60,8 +60,8 @@ fn main() {
 
     let mut retval = sgx_status_t::SGX_SUCCESS;
 
-    let hostname = "example.com";
-    let port = 443;
+    let hostname = "localhost";
+    let port = 8888;
 
     let hostname = format!("https://{}:{}", hostname, port);
     let c_hostname = CString::new(hostname.to_string()).unwrap();

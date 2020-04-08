@@ -33,6 +33,7 @@ use std::ffi::CStr;
 use std::net::TcpStream;
 use std::os::raw::c_char;
 use std::prelude::v1::*;
+use std::path::PathBuf;
 
 #[no_mangle]
 pub extern "C" fn send_http_request(hostname: *const c_char) -> sgx_status_t {
@@ -48,10 +49,15 @@ pub extern "C" fn send_http_request(hostname: *const c_char) -> sgx_status_t {
     //Connect to remote host
     let stream = TcpStream::connect(conn_addr).unwrap();
 
-    //Open secure connection over TlsStream, because of `addr` (https)
-    let mut stream = tls::Config::default()
-        .connect(addr.host().unwrap_or(""), stream)
-        .unwrap();
+    ////Open secure connection over TlsStream, because of `addr` (https)
+    //let mut stream = tls::Config::default()
+    //    .connect(addr.host().unwrap_or(""), stream)
+    //    .unwrap();
+
+    let cert_pathbuf: PathBuf = "../../cert/ca.crt".into();
+    let mut tls_config = tls::Config::default();
+    tls_config.add_root_cert_file_pem(cert_pathbuf.as_path()).unwrap();
+    let mut stream = tls_config.connect(addr.host().unwrap_or(""), stream).unwrap();
 
     //Container for response's body
     let mut writer = Vec::new();
