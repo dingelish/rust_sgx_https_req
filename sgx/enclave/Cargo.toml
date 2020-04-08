@@ -1,0 +1,16 @@
+[package]
+name = "Httpreqenclave"
+version = "1.0.0"
+authors = ["The Teaclave Authors"]
+edition = "2018"
+
+[lib]
+name = "httpreqenclave"
+crate-type = ["staticlib"]
+
+[dependencies]
+http_req = { git = "https://github.com/mesalock-linux/http_req-sgx" }
+
+[target.'cfg(not(target_env = "sgx"))'.dependencies]
+sgx_types = { rev = "v1.1.1", git = "https://github.com/apache/teaclave-sgx-sdk.git" }
+sgx_tstd = { rev = "v1.1.1", git = "https://github.com/apache/teaclave-sgx-sdk.git",  features = ["net"] }
